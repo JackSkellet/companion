@@ -1700,8 +1700,11 @@ io.on('connection', function(socket) {
 
     	socket.on('makeX', function(data) {
 	    logger.log('Making rebootfile Executable');
-		child_process.exec('sudo chmod +x $HOME/companion/scripts/jmhubrestart.sh', function (error, stdout, stderr) {
+	    setTimeout(function(){
+	        child_process.exec('sudo chmod +x $HOME/companion/scripts/jmhubrestart.sh', function (error, stdout, stderr) {
 			logger.log(stdout + stderr);
+	    },2000);
+
 		});
 	});
 
