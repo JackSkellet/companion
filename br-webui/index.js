@@ -1689,14 +1689,16 @@ io.on('connection', function(socket) {
 		child_process.exec('sudo chmod +x $HOME/vhusbdarmpi3', function (error, stdout, stderr) {
 			logger.log(stdout + stderr);
 		});
-		logger.log('Making startfile Executable');
+	});
+
+	socket.on('jmboot', function(data) {
+	    logger.log('Making startfile Executable');
 		child_process.exec('sudo chmod +x $HOME/companion/scripts/start_jmhub.sh', function (error, stdout, stderr) {
 			logger.log(stdout + stderr);
 		});
-		logger.log('Rebooting');
-		child_process.exec('sudo reboot now', function (error, stdout, stderr) {
-			logger.log(stdout + stderr);
 	});
+
+
 	
 	socket.on('shutdown', function(data) {
 		logger.log('shutdown');
