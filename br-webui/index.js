@@ -1686,7 +1686,7 @@ io.on('connection', function(socket) {
 
 	socket.on('JMHub', function(data) {
 		logger.log('Making JMHUB Executable');
-		child_process.exec('sudo chmod +x ./vhusbdarmpi3', function (error, stdout, stderr) {
+		child_process.exec('sudo chmod +x $HOME/vhusbdarmpi3', function (error, stdout, stderr) {
 			logger.log(stdout + stderr);
 		});
 	});
