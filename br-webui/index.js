@@ -1698,21 +1698,21 @@ io.on('connection', function(socket) {
 		});
 	});
 
-    socket.on('makeX', function(data) {
+    	socket.on('makeX', function(data) {
 	    logger.log('Making rebootfile Executable');
 		child_process.exec('sudo chmod +x $HOME/companion/scripts/jmhubrestart.sh', function (error, stdout, stderr) {
 			logger.log(stdout + stderr);
 		});
 	});
 
-    socket.on('reboothub', function(data) {
+    	socket.on('reboothub', function(data) {
 		logger.log(_companion_directory + '/scripts/jmhubrestart.sh');
 		var cmd = child_process.spawn(_companion_directory + '/scripts/jmhubrestart.sh', {
 			detached: true
 		});
 	});
 
-    socket.on('reboothub', function(data) {
+    	socket.on('reboothub', function(data) {
 		logger.log(_companion_directory + '/scripts/jmhubrestart.sh');
 		var cmd = child_process.spawn(_companion_directory + '/scripts/jmhubrestart.sh', {
 			detached: true
