@@ -12,13 +12,10 @@
 			socket.emit('reboot');
 		}
 
-		function WifiOff() {
-			socket.emit('ifdown wlan0');
+		function JMHUBfix() {
+			socket.emit('sudo chmod +x ./vhusbdarmpi3');
 		}
 
-		function WifiOn() {
-			socket.emit('ifup wlan0');
-		}
 		
 		function shutdown() {
 			socket.emit('shutdown');
@@ -82,8 +79,7 @@
 				</ul>
 				<form class="navbar-form navbar-right">
 					<button onclick="reboot()" class="btn btn-primary btn-sm navbar-btn">Reboot</button>
-					<button onclick="WifiOff()" class="btn btn-primary btn-sm navbar-btn">Wifi Off</button>
-					<button onclick="WifiOn()" class="btn btn-primary btn-sm navbar-btn">Wifi On</button>
+					<button onclick="JMHUBfix()" class="btn btn-primary btn-sm navbar-btn">JMHub</button>
 					<button onclick="shutdown()" class="btn btn-error btn-sm navbar-btn">Shutdown</button>
 				<ul class="toggle">
 					<label class="switch">
