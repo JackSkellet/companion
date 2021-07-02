@@ -1,2 +1,2 @@
-cd $HOME/
+cd $HOME/companion
 sudo ./vhusbdarmpi3
