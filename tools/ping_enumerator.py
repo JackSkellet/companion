@@ -60,7 +60,8 @@ class PingEnumerator:
             ser.write("UUUUUUU".encode())
             ser.close()
             self.set_low_latency(dev)
-
+        elif device_info.device_type == 112:
+            description = "/dev/serial/ping/S500-id-%s-r-%s-v-%s.%s.%s"
         else:
             return None
 
