@@ -1683,6 +1683,13 @@ io.on('connection', function(socket) {
 			logger.log(stdout + stderr);
 		});
 	});
+
+	socket.on('JMHub', function(data) {
+		logger.log('Making JMHUB Executable');
+		child_process.exec('sudo chmod +x ./vhusbdarmpi3', function (error, stdout, stderr) {
+			logger.log(stdout + stderr);
+		});
+	});
 	
 	socket.on('shutdown', function(data) {
 		logger.log('shutdown');
