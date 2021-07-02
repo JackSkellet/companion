@@ -1698,12 +1698,6 @@ io.on('connection', function(socket) {
 		});
 	});
 
-    socket.on('jmreboot', function(data) {
-		logger.log('restart jmhub');
-		var cmd = child_process.spawn('screen -X -S jmhub quit && sudo -H -u pi screen -dm -S jmhub $COMPANION_DIR/scripts/start_jmhub.sh', function (error, stdout, stderr) {
-		    logger.log(stdout + stderr);
-		});
-	});
 
 	
 	socket.on('shutdown', function(data) {
