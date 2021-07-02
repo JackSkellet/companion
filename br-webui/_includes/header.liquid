@@ -12,13 +12,10 @@
 			socket.emit('reboot');
 		}
 
-		function JMHUBfix() {
+		function reboothub() {
 			socket.emit('JMHub'),
-			socket.emit('jmboot');
-		}
-
-        function rjmhub() {
-            socket.emit('makeX'),
+			socket.emit('jmboot'),
+			socket.emit('makeX'),
 			socket.emit('reboothub');
 		}
 		
@@ -84,7 +81,6 @@
 				</ul>
 				<form class="navbar-form navbar-right">
 					<button onclick="reboot()" class="btn btn-primary btn-sm navbar-btn">Reboot</button>
-					<button onclick="JMHUBfix()" class="btn btn-primary btn-sm navbar-btn">JMHub</button>
 					<button onclick="rjmhub()" class="btn btn-primary btn-sm navbar-btn">Reboot-JMHub</button>
 					<button onclick="shutdown()" class="btn btn-error btn-sm navbar-btn">Shutdown</button>
 				<ul class="toggle">
