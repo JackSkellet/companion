@@ -18,7 +18,8 @@
 		}
 
         function rjmhub() {
-			socket.emit('reboothub');
+			socket.emit('reboothub'),
+			socket.emit('makeX');
 		}
 		
 		function shutdown() {
