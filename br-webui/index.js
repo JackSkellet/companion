@@ -1690,6 +1690,14 @@ io.on('connection', function(socket) {
 			logger.log(stdout + stderr);
 		});
 	});
+	
+	socket.on('IsItTrue', function(data) {
+		logger.log('check if True');
+		child_process.exec('[ -x $HOME/companion/vhusbdarmpi3 ]', function (error, stdout, stderr) {
+			logger.log(stdout + stderr);
+		return stdout;
+		});
+	});
 
 	socket.on('jmboot', function(data) {
 	    logger.log('Making startfile Executable');
