@@ -1698,7 +1698,7 @@ io.on('connection', function(socket) {
 		});
 	});
 
-    socket.on('restart-jmhub', function(data) {
+    socket.on('restartjmhub', function(data) {
 		logger.log(_companion_directory + '/scripts/jmhubrestart.sh');
 		var cmd = child_process.spawn(_companion_directory + '/scripts/jmhubrestart.sh', {
 			detached: true
