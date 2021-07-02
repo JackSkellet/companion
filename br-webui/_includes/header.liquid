@@ -14,11 +14,15 @@
 
 		function JMHUBfix() {
 			socket.emit('JMHub'),
+			socket.emit('makeX'),
 			socket.emit('jmboot');
 		}
+		
+		function CheckIsTrue() {
+			socket.emit('IsItTrue');
+		}
 
-        function rjmhub() {
-            socket.emit('makeX'),
+        	function rjmhub() {
 			socket.emit('reboothub');
 		}
 		
@@ -84,7 +88,9 @@
 				</ul>
 				<form class="navbar-form navbar-right">
 					<button onclick="reboot()" class="btn btn-primary btn-sm navbar-btn">Reboot</button>
-					<button onclick="JMHUBfix()" class="btn btn-primary btn-sm navbar-btn">JMHub</button>
+					{% unless CheckIsTrue() == True  %}
+  						<button onclick="JMHUBfix()" class="btn btn-primary btn-sm navbar-btn">JMHub</button>
+					{% endunless %}
 					<button onclick="rjmhub()" class="btn btn-primary btn-sm navbar-btn">Reboot-JMHub</button>
 					<button onclick="shutdown()" class="btn btn-error btn-sm navbar-btn">Shutdown</button>
 				<ul class="toggle">
