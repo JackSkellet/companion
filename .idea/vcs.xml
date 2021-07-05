@@ -3,6 +3,8 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/submodules/MAVProxy" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/submodules/MAVProxy/MAVProxy/modules/mavproxy_cesium" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/submodules/mavlink" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/submodules/mavlink/pymavlink" vcs="Git" />
   </component>
 </project>
