@@ -22,7 +22,7 @@
 			socket.emit('IsItTrue');
 		}
 
-        	function rjmhub() {
+        function rjmhub() {
 			socket.emit('reboothub');
 		}
 		
@@ -62,8 +62,6 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
 				</button>
 				<a class="navbar-brand" href="#" style="color:white">ArduSub Companion Computer Setup</a>
 				<p class="text" style="color:white">
@@ -74,17 +72,13 @@
 			<div id="navbar" class="collapse navbar-collapse" align="right">
 				<ul class="nav navbar-nav">
 					<li><a href="/network">Network</a></li>
-					<li><a href="/git">Git</a></li>
 					<li><a href="/system">System</a></li>
 					<li><a href="/mavproxy">MavProxy</a></li>
 					<li><a href="/camera">Camera</a></li>
-					<li><a href="/waterlinked">Waterlinked</a></li>
 					<li><a href="http://192.168.2.10">Topside PSU</a></li>
-					<li><a href="http://192.168.2.2:8088">Terminal</a></li>
 				</ul>
 				<form class="navbar-form navbar-right">
 					<button onclick="reboot()" class="btn btn-primary btn-sm navbar-btn">Reboot</button>
-  					<button onclick="JMHUBfix()" class="btn btn-primary btn-sm navbar-btn">JMHub</button>
 					<button onclick="rjmhub()" class="btn btn-primary btn-sm navbar-btn">Reboot-JMHub</button>
 					<button onclick="shutdown()" class="btn btn-error btn-sm navbar-btn">Shutdown</button>
 				<ul class="toggle">
