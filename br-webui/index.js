@@ -1684,31 +1684,6 @@ io.on('connection', function(socket) {
 		});
 	});
 
-	socket.on('JMHub', function(data) {
-		logger.log('Making JMHUB Executable');
-		child_process.exec('sudo chmod +x $HOME/companion/vhusbdarmpi3', function (error, stdout, stderr) {
-			logger.log(stdout + stderr);
-		});
-	});
-
-	socket.on('jmboot', function(data) {
-	    logger.log('Making startfile Executable');
-		child_process.exec('sudo chmod +x $HOME/companion/scripts/start_jmhub.sh', function (error, stdout, stderr) {
-			logger.log(stdout + stderr);
-		});
-	});
-
-
-    socket.on('makeX', function(data) {
-	    logger.log('Making rebootfile Executable');
-	    setTimeout(function(){
-	        child_process.exec('sudo chmod +x $HOME/companion/scripts/jmhubrestart.sh', function (error, stdout, stderr) {
-			logger.log(stdout + stderr);
-	    },2000);
-
-		});
-	});
-
     socket.on('reboothub', function(data) {
 		logger.log(_companion_directory + '/scripts/jmhubrestart.sh');
 		var cmd = child_process.spawn(_companion_directory + '/scripts/jmhubrestart.sh', {
@@ -1716,8 +1691,6 @@ io.on('connection', function(socket) {
 		});
 	});
 
-
-	
 	socket.on('shutdown', function(data) {
 		logger.log('shutdown');
 		child_process.exec('sudo shutdown -h now', function (error, stdout, stderr) {
