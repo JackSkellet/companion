@@ -36,6 +36,7 @@ class PingEnumerator:
         device was not detected
         """
 
+        print("Checking if " + dev + " is a Ping device...")
         try:
             ping = PingDevice("/dev/serial/by-id/" + dev, 115200)
         except Exception as exception:
@@ -140,6 +141,7 @@ if __name__ == '__main__':
     enumerator.erase_old_symlinks()
 
     # Look at each serial device, probe for ping
+    print("Detecting Ping devices:")
     for dev in enumerator.list_serial_devices():
         link = enumerator.detect_device(dev)
         if link:
