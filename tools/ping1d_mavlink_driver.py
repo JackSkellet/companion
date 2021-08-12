@@ -15,7 +15,7 @@ import requests
 from pymavlink import mavutil
 from brping import PingMessage
 from brping import PingParser
-from brping import PING1D_DISTANCE, PING1D_DISTANCE_SIMPLE, PING1D_PROFILE
+from brping import PING1D_DISTANCE, PING1D_DISTANCE_SIMPLE, PING1D_PROFILE, PING1D_SET_PING_INTERVAL
 
 PARSER = argparse.ArgumentParser(description="Ping1D to mavlink bridge.")
 PARSER.add_argument('--ping',
@@ -42,7 +42,13 @@ def main():
     """ Main function
     """
 
-    if not is_compatible_ardusub_version():
+    autopilot_io = mavutil.mavlink_connection("udpout:" + ARGS.mavlink,
+                                              source_system=1,
+                                              source_component=192
+                                              )
+
+    if not is_compatible_ardusub_version(autopilot_io):
+        print("Uncompatible ardusub version, aborting...")
         exit(-1)
     ## The time that this script was started
     tboot = time.time()
@@ -120,6 +126,15 @@ def main():
             orientation,
             covarience)
 
+    # set the ping interval once at startup
+    # the ping interval may change if another client to the pingproxy requests it
+    data = PingMessage()
+    data.request_id = PING1D_SET_PING_INTERVAL
+    data.src_device_id = 0
+    data.ping_interval = int(ping_interval_ms*1000)
+    data.pack_msg_data()
+    ping1d_io.sendto(data.msg_data, pingserver)
+
     while True:
         time.sleep(0.001)
         tnow = time.time()
@@ -151,25 +166,28 @@ def main():
                     send_distance_data(distance, deviceid, confidence)
 
 
-def is_compatible_ardusub_version():
+def is_compatible_ardusub_version(autopilot):
     """
     Checks if the running ardusub version is 4.0.0 or newer
     (4.0.0 disabled use of rangefinder for depth control)
     """
     while True:
-        r = requests.get('http://127.0.0.1:4777/mavlink/AUTOPILOT_VERSION/flight_sw_version')
-        # TO-DO: fix next line when https://github.com/patrickelectric/mavlink2rest/issues/3 is solved
-        if "No valid path" in r.text or r.status_code == 404:
-            print("could not read firmware version, retrying in 5 seconds...")
-            time.sleep(5)
-            continue
-        flight_sw_version = r.json()
-        majorVersion = (flight_sw_version >> (8*3)) & 0xFF # bit-fu to extract major version
-        if majorVersion < 4:
-            print("This driver requires ardusub >= 4.0.0, halting...")
-            return False
-        print("Valid ardusub version found, starting code...")
-        return True
+        # Send request for autopilot version
+        autopilot.mav.autopilot_version_request_send(
+            autopilot.target_system,
+            autopilot.target_component
+        )
+        msg = autopilot.recv_match(type='AUTOPILOT_VERSION')
+
+        # Check if version information was obtained
+        # Print version
+        if msg:
+            version_d = msg.to_dict()
+            version_hex = version_d["flight_sw_version"]
+            # This returns something like 0x40003ff
+            major = (version_hex >> (8 * 3)) & 0xFF  # bit-fu to extract major version
+            return major >= 4
+        time.sleep(1)
 
 if __name__ == '__main__':
     main()

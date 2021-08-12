@@ -170,3 +170,14 @@ Initial release
 - Update default ArduSub firmware to 4.0.3
 - Remove unsupported 'upload companion update' option from the webui
 - Replace old px_uploader.py with new uploader.py for flashing autopilot firmware
+
+0.0.27:
+- bugfix mavlink2rest gcs heartbeat interference
+- bugfix broken wifi service (0.0.22 dependency installation)
+- various mavproxy configuration adjustments to reduce CPU usage
+
+0.0.28:
+- change default waterlinked underwater gps hostname from waterlinked.local to 192.168.2.94
+- use floats for underwater gps latitude and longitude
+- fix regression in 0.0.27: add mavproxy param module to force mavlink2 communication
+- ping1d mavlink driver: change default device measurement interval from 2Hz to 10Hz
