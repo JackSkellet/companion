@@ -5,8 +5,9 @@
 --cmd="param forceload /home/pi/companion/params/serial0.param"
 --logfile=/tmp/telemetry.tlog
 --out udpin:localhost:9000
---out udpout:localhost:9002
 --out udpin:0.0.0.0:14660
 --out udpbcast:192.168.2.255:14550
+--out udpbcast:192.168.2.1:14555
 --mav20
---streamrate 10
+--streamrate 5
+--default-modules=output,param

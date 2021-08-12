@@ -356,8 +356,10 @@ fi
 PRE_0_0_22=$(( git rev-list --count --left-right 0.0.22...revert-point || echo 0 ) | cut -f1)
 
 if (( $PRE_0_0_22 > 0 )); then
+    # setup-tools is unable to find bottle, so we use pip instead.
+    # pip requires that we cd into the directory before installing for things to work properly.
     sudo apt install -y python3-pip
-    sudo python3 $HOME/companion/services/network/setup.py install
+    cd $HOME/companion/services/network/ && sudo pip3 install . && cd -
 fi
 
 PRE_0_0_23=$(( git rev-list --count --left-right 0.0.23...revert-point || echo 0 ) | cut -f1)
@@ -376,6 +378,52 @@ if (( $PRE_0_0_23 > 0 )); then
     fi
     # remove old logs (free disk space)
     rm -rf $HOME/telemetry
+fi
+
+PRE_0_0_27=$(( git rev-list --count --left-right 0.0.27...revert-point || echo 0 ) | cut -f1)
+if (( $PRE_0_0_27 > 0 )); then
+    # reconfigure only if a user configuration exists in the home directory
+    USER_MAVPROXY_PARAMS=$HOME/mavproxy.param
+    if [ -e $USER_MAVPROXY_PARAMS ]; then
+        # delete now-unused mavlink2rest endpoint
+        sed -i '/--out udpout:localhost:9002/d' $USER_MAVPROXY_PARAMS
+        # delete any --default-modules line if it already exists
+        sed -i '/--default-modules=*/d' $USER_MAVPROXY_PARAMS
+        # add --default-modules=output
+        # This makes mavproxy load only the 'output' module by default.
+        # It saves around 5% of cpu usage.
+        # All modules are still available, it just takes a 'module load' to
+        # load them in runtime before using.
+        sed -i '$ a --default-modules=output' $USER_MAVPROXY_PARAMS
+        # cd into pymavlink folder to install with pip
+        cd /home/pi/companion/submodules/mavlink/pymavlink
+        sudo MDEF=/home/pi/companion/submodules/mavlink/message_definitions python -m pip install . -v --upgrade --force-reinstall
+        cd -
+    fi
+fi
+
+PRE_0_0_28=$(( git rev-list --count --left-right 0.0.28...revert-point || echo 0 ) | cut -f1)
+if (( $PRE_0_0_28 > 0 )); then
+    # reconfigure only if a user configuration exists in the home directory
+    USER_MAVPROXY_PARAMS=$HOME/mavproxy.param
+    if [ -e $USER_MAVPROXY_PARAMS ]; then
+        # delete any --default-modules line if it already exists
+        sed -i '/--default-modules=*/d' $USER_MAVPROXY_PARAMS
+        # add --default-modules=output,param
+        sed -i '$ a --default-modules=output,param' $USER_MAVPROXY_PARAMS
+
+        # this line would be duplicated if 0.0.23 update step were to be run twice
+        # delete any 'param forceload' line if it already exists
+        sed -i '/param forceload*/d' $USER_MAVPROXY_PARAMS
+        # force SERIAL0_PROTOCOL parameter to mavlink2
+        sed -i '$ a --cmd="param forceload /home/pi/companion/params/serial0.param"' $USER_MAVPROXY_PARAMS
+
+        # this line would be duplicated if 0.0.23 update step were to be run twice
+        # delete any --logfile line if it already exists
+        sed -i '/--logfile=*/d' $USER_MAVPROXY_PARAMS
+        # store logs in the /tmp directory
+        sed -i '$ a --logfile=/tmp/telemetry.tlog' $USER_MAVPROXY_PARAMS
+    fi
 fi
 
 echo 'Update Complete, the system will reboot now.'

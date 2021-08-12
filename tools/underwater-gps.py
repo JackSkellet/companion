@@ -254,8 +254,8 @@ def processMasterPosition(response, *args, **kwargs):
             msg = format(
                 message,
                 datetime.now(),
-                result['lat'],
-                result['lon'],
+                float(result['lat']),
+                float(result['lon']),
                 orientation=result['orientation']
                 )
             qgc_nmea_socket.sendto(msg, ('192.168.2.1', 14401))

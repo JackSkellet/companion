@@ -11,6 +11,10 @@
 		function reboot() {
 			socket.emit('reboot');
 		}
+
+        function rjmhub() {
+			socket.emit('reboothub');
+		}
 		
 		function shutdown() {
 			socket.emit('shutdown');
@@ -57,11 +61,12 @@
 				<ul class="nav navbar-nav">
 					<li><a href="/network">Network</a></li>
 					<li><a href="/system">System</a></li>
+					<li><a href="/mavproxy">MavProxy</a></li>
 					<li><a href="/camera">Camera</a></li>
-					<li><a href="/routing">Routing</a></li>
 				</ul>
 				<form class="navbar-form navbar-right">
 					<button onclick="reboot()" class="btn btn-primary btn-sm navbar-btn">Reboot</button>
+					<button onclick="rjmhub()" class="btn btn-primary btn-sm navbar-btn">Reboot-JMHub</button>
 					<button onclick="shutdown()" class="btn btn-error btn-sm navbar-btn">Shutdown</button>
 				<ul class="toggle">
 					<label class="switch">
