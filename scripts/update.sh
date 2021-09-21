@@ -21,6 +21,8 @@ sleep 10
 echo 'adding lock'
 touch $HOME/.updating
 
+echo 'backing up config.ini'
+    cp $HOME/companion/config.ini $HOME/.config.ini
 
 if [ -z "$4" ]; then
     echo 'skipping backup...'
@@ -31,8 +33,6 @@ else
     echo 'backup current repo'
     cp -r $HOME/companion $HOME/.companion
 
-    echo 'backing up config.ini'
-    cp $HOME/companion/config.ini $HOME/.config.ini
 fi
 
 cd $HOME/companion
