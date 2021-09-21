@@ -1351,42 +1351,43 @@ io.on('connection', function(socket) {
 
 	// system setup
 	socket.on('update pixhawk', function(data) {
+        child_process.exec('screen -X -S jmhub quit');
+        var delayInMilliseconds = 1000; //1 second
+        setTimeout(function() {
+            if (data.option == 'dev') {
+		    	// Use spawn instead of exec to get callbacks for each line of stderr, stdout
+		    	var cmd = child_process.spawn(_companion_directory + '/tools/flash_px4.py', ['--latest']);
+		    } else if (data.option == 'beta') {
+		    	var cmd = child_process.spawn(_companion_directory + '/tools/flash_px4.py', ['--url', 'http://firmware.ardupilot.org/Sub/beta/Pixhawk1/ardusub.apj']);
+		    } else if (data.option == 'file') {
+		    	var cmd = child_process.spawn(_companion_directory + '/tools/flash_px4.py', ['--file', '/tmp/data/' + data.file]);
+		    } else {
+		    	var cmd = child_process.spawn(_companion_directory + '/tools/flash_px4.py');
+		    }
 
-		var cmd = child_process.spawn(_companion_directory + '/scripts/stopjmhub.sh', {
-			detached: true
-		});
+		    cmd.stdout.on('data', function (data) {
+		    	socket.emit('terminal output', data.toString());
+		    	logger.log(data.toString());
+		    });
 
-		if (data.option == 'dev') {
-			// Use spawn instead of exec to get callbacks for each line of stderr, stdout
-			var cmd = child_process.spawn(_companion_directory + '/tools/flash_px4.py', ['--latest']);
-		} else if (data.option == 'beta') {
-			var cmd = child_process.spawn(_companion_directory + '/tools/flash_px4.py', ['--url', 'http://firmware.ardupilot.org/Sub/beta/Pixhawk1/ardusub.apj']);
-		} else if (data.option == 'file') {
-			var cmd = child_process.spawn(_companion_directory + '/tools/flash_px4.py', ['--file', '/tmp/data/' + data.file]);
-		} else {
-			var cmd = child_process.spawn(_companion_directory + '/tools/flash_px4.py');
-		}
-		
-		cmd.stdout.on('data', function (data) {
-			socket.emit('terminal output', data.toString());
-			logger.log(data.toString());
-		});
-		
-		cmd.stderr.on('data', function (data) {
-			socket.emit('terminal output', data.toString());
-			logger.log(data.toString());
-		});
-		
-		cmd.on('exit', function (code) {
-			logger.log('pixhawk update exited with code ' + code.toString());
-			socket.emit('pixhawk update complete');
-		});
+		    cmd.stderr.on('data', function (data) {
+		    	socket.emit('terminal output', data.toString());
+		    	logger.log(data.toString());
+		    });
 
-		cmd.on('error', (err) => {
-			logger.log('Failed to start child process.');
-			logger.log(err.toString() + '\n');
-		});
-	});
+		    cmd.on('exit', function (code) {
+		    	logger.log('pixhawk update exited with code ' + code.toString());
+		    	socket.emit('pixhawk update complete');
+		    });
+
+		    cmd.on('error', (err) => {
+		    	logger.log('Failed to start child process.');
+		    	logger.log(err.toString() + '\n');
+		    });
+
+        }, delayInMilliseconds);
+    });
+
 
 	// Restore pixhawk factory firmware
 	socket.on('restore px fw', function(data) {
