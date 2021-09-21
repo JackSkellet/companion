@@ -1351,9 +1351,10 @@ io.on('connection', function(socket) {
 
 	// system setup
 	socket.on('update pixhawk', function(data) {
-		logger.log("update pixhawk");
-		logger.log(_companion_directory + '/scripts/stopjmhub.sh');
-		var cmd = child_process.spawn(_companion_directory + '/scripts/stopjmhub.sh');
+
+		var cmd = child_process.spawn(_companion_directory + '/scripts/stopjmhub.sh', {
+			detached: true
+		});
 
 		if (data.option == 'dev') {
 			// Use spawn instead of exec to get callbacks for each line of stderr, stdout
