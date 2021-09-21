@@ -1,4 +1,11 @@
 #!/bin/bash
+echo 'Checking for JMhub'
+
+if screen -ls | grep jmhub; then
+        screen -X -S jmhub quit
+        echo 'Exiting JMhub'
+fi
+
 echo 'STARTING UPDATE'
 echo $(printenv)
 
