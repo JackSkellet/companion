@@ -1,4 +1,5 @@
 #!/bin/bash
+
 cd $HOME/companion
 
 echo 'validating archive'
