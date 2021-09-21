@@ -93,4 +93,7 @@ time.sleep(10)
 print "Restarting mavproxy"
 os.system("screen -dm -S mavproxy "+home+"/companion/scripts/start_mavproxy_telem_splitter.sh")
 
+print "Restarting JMHub"
+os.system("screen -dm -S jmhub $COMPANION_DIR/scripts/start_jmhub.sh")
+
 print "Complete!"
