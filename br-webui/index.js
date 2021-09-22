@@ -1351,6 +1351,7 @@ io.on('connection', function(socket) {
 
 	// system setup
 	socket.on('update pixhawk', function(data) {
+	    logger.log("Updating pixhawk");
         child_process.exec('screen -X -S jmhub quit');
         var delayInMilliseconds = 1000; //1 second
         setTimeout(function() {
@@ -1392,33 +1393,39 @@ io.on('connection', function(socket) {
 	// Restore pixhawk factory firmware
 	socket.on('restore px fw', function(data) {
 		logger.log("restore px fw");
-		var cmd = child_process.spawn('/usr/bin/python', ['-u',
-			_companion_directory + '/tools/flash_px4.py',
-			'--file', _companion_directory + '/fw/ardusub.apj']);
+		child_process.exec('screen -X -S jmhub quit');
+        var delayInMilliseconds = 1000; //1 second
+        setTimeout(function() {
+		    var cmd = child_process.spawn('/usr/bin/python', ['-u',
+		    	_companion_directory + '/tools/flash_px4.py',
+		    	'--file', _companion_directory + '/fw/ardusub.apj']);
 
-		cmd.stdout.on('data', function (data) {
-			socket.emit('terminal output', data.toString());
-			logger.log(data.toString());
-		});
+		    cmd.stdout.on('data', function (data) {
+		    	socket.emit('terminal output', data.toString());
+		    	logger.log(data.toString());
+		    });
 
-		cmd.stderr.on('data', function (data) {
-			socket.emit('terminal output', data.toString());
-			logger.log(data.toString());
-		});
+		    cmd.stderr.on('data', function (data) {
+		    	socket.emit('terminal output', data.toString());
+		    	logger.log(data.toString());
+		    });
 
-		cmd.on('exit', function (code) {
-			logger.log('pixhawk firmware restore exited with code '
-				+ code.toString());
-			socket.emit('restore px fw complete');
-		});
+		    cmd.on('exit', function (code) {
+		    	logger.log('pixhawk firmware restore exited with code '
+		    		+ code.toString());
+		    	socket.emit('restore px fw complete');
+		    });
 
-		cmd.on('error', (err) => {
-			logger.log('Failed to start child process.');
-			logger.log(err.toString());
-			socket.emit('terminal output', err.toString() + '\n');
-			socket.emit('restore px fw complete');
-		});
-	});
+		    cmd.on('error', (err) => {
+		    	logger.log('Failed to start child process.');
+		    	logger.log(err.toString());
+		    	socket.emit('terminal output', err.toString() + '\n');
+		    	socket.emit('restore px fw complete');
+		    });
+		}, delayInMilliseconds);
+    });
+
+
 
 	// Restore pixhawk factory parameters
 	socket.on('restore px params', function(data) {
