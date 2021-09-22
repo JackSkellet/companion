@@ -426,8 +426,13 @@ if (( $PRE_0_0_28 > 0 )); then
     fi
 fi
 
-echo 'Update Complete, the system will reboot now.'
-echo 'Wait for 30 seconds and refresh the page.'
+echo 'Update Complete.'
+echo 'Replacing Backup of config.ini'
+
+cp -f $HOME/.config.ini $HOME/companion/config.ini
+rm -f $HOME/.config.ini
+
+echo 'The ROV will now reboot, Please wait for 30 seconds and refresh the page.'
 
 sleep 0.1
 
