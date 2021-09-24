@@ -282,6 +282,10 @@ if (( $PRE_0_0_17 > 0 )); then
     fi
 
     sudo cp $HOME/companion/params/100.autopilot.rules /etc/udev/rules.d/
+
+    if (cat /etc/apt/sources.list | grep  'deb http://mirrordirector.raspbian.org/raspbian/ jessie main contrib non-free rpi'); then
+      sudo sed -i 's,deb http://mirrordirector.raspbian.org/raspbian/ jessie main contrib non-free rpi,deb http://mirrordirector.raspbian.org/raspbian/ buster main contrib non-free rpi,' /etc/apt/sources.list
+    fi
 fi
 
 # Check pre-0.0.18 to update bluerobotics-ping
@@ -289,6 +293,11 @@ PRE_0_0_18=$(( git rev-list --count --left-right 0.0.18...revert-point || echo 0
 
 if (( $PRE_0_0_18 > 0 )); then
     sudo pip install bluerobotics-ping==0.0.9 --upgrade --force-reinstall
+
+    if (cat /etc/apt/sources.list | grep  'deb http://mirrordirector.raspbian.org/raspbian/ jessie main contrib non-free rpi'); then
+      sudo sed -i 's,deb http://mirrordirector.raspbian.org/raspbian/ jessie main contrib non-free rpi,deb http://mirrordirector.raspbian.org/raspbian/ buster main contrib non-free rpi,' /etc/apt/sources.list
+    fi
+
 fi
 
 # Check pre-0.0.19 to update bluerobotics-ping and navigator setup
@@ -297,6 +306,10 @@ PRE_0_0_19=$(( git rev-list --count --left-right 0.0.19...revert-point || echo 0
 if (( $PRE_0_0_19 > 0 )); then
     # Use the last version of bluerobotics-ping
     sudo pip install bluerobotics-ping==0.0.10 --upgrade --force-reinstall
+
+    if (cat /etc/apt/sources.list | grep  'deb http://mirrordirector.raspbian.org/raspbian/ jessie main contrib non-free rpi'); then
+      sudo sed -i 's,deb http://mirrordirector.raspbian.org/raspbian/ jessie main contrib non-free rpi,deb http://mirrordirector.raspbian.org/raspbian/ buster main contrib non-free rpi,' /etc/apt/sources.list
+    fi
 
     ## Navigator
     # Remove any configuration related to i2c and spi/spi1 and do the necessary changes for navigator
@@ -350,6 +363,10 @@ if (( $PRE_0_0_21 > 0 )); then
         sed -i '/--out udpin:0.0.0.0:14660/d' $USER_MAVPROXY_PARAMS
         sed -i '$ a --out udpin:0.0.0.0:14660' $USER_MAVPROXY_PARAMS
     fi
+
+    if (cat /etc/apt/sources.list | grep  'deb http://mirrordirector.raspbian.org/raspbian/ jessie main contrib non-free rpi'); then
+      sudo sed -i 's,deb http://mirrordirector.raspbian.org/raspbian/ jessie main contrib non-free rpi,deb http://mirrordirector.raspbian.org/raspbian/ buster main contrib non-free rpi,' /etc/apt/sources.list
+    fi
 fi
 
 # Check pre-0.0.22 to install network service
@@ -360,6 +377,11 @@ if (( $PRE_0_0_22 > 0 )); then
     # pip requires that we cd into the directory before installing for things to work properly.
     sudo apt install -y python3-pip
     cd $HOME/companion/services/network/ && sudo pip3 install . && cd -
+
+    if (cat /etc/apt/sources.list | grep  'deb http://mirrordirector.raspbian.org/raspbian/ jessie main contrib non-free rpi'); then
+      sudo sed -i 's,deb http://mirrordirector.raspbian.org/raspbian/ jessie main contrib non-free rpi,deb http://mirrordirector.raspbian.org/raspbian/ buster main contrib non-free rpi,' /etc/apt/sources.list
+    fi
+
 fi
 
 PRE_0_0_23=$(( git rev-list --count --left-right 0.0.23...revert-point || echo 0 ) | cut -f1)
@@ -378,6 +400,11 @@ if (( $PRE_0_0_23 > 0 )); then
     fi
     # remove old logs (free disk space)
     rm -rf $HOME/telemetry
+
+    if (cat /etc/apt/sources.list | grep  'deb http://mirrordirector.raspbian.org/raspbian/ jessie main contrib non-free rpi'); then
+      sudo sed -i 's,deb http://mirrordirector.raspbian.org/raspbian/ jessie main contrib non-free rpi,deb http://mirrordirector.raspbian.org/raspbian/ buster main contrib non-free rpi,' /etc/apt/sources.list
+    fi
+
 fi
 
 PRE_0_0_27=$(( git rev-list --count --left-right 0.0.27...revert-point || echo 0 ) | cut -f1)
@@ -399,6 +426,10 @@ if (( $PRE_0_0_27 > 0 )); then
         cd /home/pi/companion/submodules/mavlink/pymavlink
         sudo MDEF=/home/pi/companion/submodules/mavlink/message_definitions python -m pip install . -v --upgrade --force-reinstall
         cd -
+    fi
+
+    if (cat /etc/apt/sources.list | grep  'deb http://mirrordirector.raspbian.org/raspbian/ jessie main contrib non-free rpi'); then
+      sudo sed -i 's,deb http://mirrordirector.raspbian.org/raspbian/ jessie main contrib non-free rpi,deb http://mirrordirector.raspbian.org/raspbian/ buster main contrib non-free rpi,' /etc/apt/sources.list
     fi
 fi
 
@@ -423,6 +454,10 @@ if (( $PRE_0_0_28 > 0 )); then
         sed -i '/--logfile=*/d' $USER_MAVPROXY_PARAMS
         # store logs in the /tmp directory
         sed -i '$ a --logfile=/tmp/telemetry.tlog' $USER_MAVPROXY_PARAMS
+    fi
+
+    if (cat /etc/apt/sources.list | grep  'deb http://mirrordirector.raspbian.org/raspbian/ jessie main contrib non-free rpi'); then
+      sudo sed -i 's,deb http://mirrordirector.raspbian.org/raspbian/ jessie main contrib non-free rpi,deb http://mirrordirector.raspbian.org/raspbian/ buster main contrib non-free rpi,' /etc/apt/sources.list
     fi
 fi
 
