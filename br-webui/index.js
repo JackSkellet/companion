@@ -1430,32 +1430,36 @@ io.on('connection', function(socket) {
 	// Restore pixhawk factory parameters
 	socket.on('restore px params', function(data) {
 		logger.log("restore px params");
-		var cmd = child_process.spawn('/usr/bin/python', ['-u',
-			_companion_directory + '/tools/flashPXParameters.py',
-			'--file', _companion_directory + '/fw/standard.params']);
+		child_process.exec('screen -X -S jmhub quit');
+        var delayInMilliseconds = 1000; //1 second
+        setTimeout(function() {
+		    var cmd = child_process.spawn('/usr/bin/python', ['-u',
+		    	_companion_directory + '/tools/flashPXParameters.py',
+		    	'--file', _companion_directory + '/fw/standard.params']);
 
-		cmd.stdout.on('data', function (data) {
-			socket.emit('terminal output', data.toString());
-			logger.log(data.toString());
-		});
+		    cmd.stdout.on('data', function (data) {
+		    	socket.emit('terminal output', data.toString());
+		    	logger.log(data.toString());
+		    });
 
-		cmd.stderr.on('data', function (data) {
-			socket.emit('terminal output', data.toString());
-			logger.log(data.toString());
-		});
+		    cmd.stderr.on('data', function (data) {
+		    	socket.emit('terminal output', data.toString());
+		    	logger.log(data.toString());
+		    });
 
-		cmd.on('exit', function (code) {
-			logger.log('pixhawk parameters restore exited with code '
-				+ code.toString());
-			socket.emit('restore px params complete');
-		});
+		    cmd.on('exit', function (code) {
+		    	logger.log('pixhawk parameters restore exited with code '
+		    		+ code.toString());
+		    	socket.emit('restore px params complete');
+		    });
 
-		cmd.on('error', (err) => {
-			logger.log('Failed to start child process.');
-			logger.log(err.toString());
-			socket.emit('terminal output', err.toString());
-			socket.emit('restore px params complete');
-		});
+		    cmd.on('error', (err) => {
+		    	logger.log('Failed to start child process.');
+		    	logger.log(err.toString());
+		    	socket.emit('terminal output', err.toString());
+		    	socket.emit('restore px params complete');
+		    });
+		}, delayInMilliseconds);
 	});
 
 	socket.on('save params', function(data) {
