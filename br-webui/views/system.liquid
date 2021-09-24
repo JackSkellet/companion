@@ -224,6 +224,7 @@ socket.on('restore px fw complete', function(data){
 
 socket.on('restore px params complete', function(data){
 	document.getElementById('restore params').disabled = false;
+	socket.emit('reboothub');
 });
 
 socket.on('reboot px complete', function(data){
